@@ -1,8 +1,9 @@
 import pygame
 import random
 from settings import *
-from enemy import Enemy
 from player import Player
+from enemy import Enemy
+from coin import Coin
 
 pygame.init()
 pygame.mixer.init()
@@ -19,11 +20,14 @@ clock = pygame.time.Clock()
 
 # Crear un grupo de sprites y añadir al jugador
 all_sprites = pygame.sprite.Group()
-player = Player(clock)
+player = Player(clock)  # Pasar clock al constructor del jugador
 all_sprites.add(player)
 
 # Crear un grupo de enemigos
 enemies = pygame.sprite.Group()
+
+# Crear un grupo de monedas
+coins = pygame.sprite.Group()
 
 # Temporizador para agregar enemigos
 enemy_spawn_timer = 0
@@ -71,20 +75,32 @@ while is_running:
         spawn_enemies(enemy_count)
 
     # Actualizo elementos
-    player.update(dt)
-    for enemy in enemies:
-        enemy.update(player, dt)
-    player.bullets.update()
-
+    for sprite in all_sprites:
+        if isinstance(sprite, Player):
+            sprite.update(dt)
+        elif isinstance(sprite, Enemy):
+            sprite.update(player, dt)
+        else:
+            sprite.update()
+    
     # Verificar colisiones entre proyectiles y enemigos
     for bullet in player.bullets:
         hit_enemies = pygame.sprite.spritecollide(bullet, enemies, False)
         for enemy in hit_enemies:
-            enemy.hp -= 20  # Reducir HP del enemigo
-            print(f'Enemy HP after hit: {enemy.hp}')  # Imprimir HP del enemigo en la consola
-            bullet.kill()  # Eliminar el proyectil
+            enemy.hp -= 30  # Reducir HP del enemigo
+            print(f'Enemy HP after hit: {enemy.hp}')  
+            bullet.kill()  
             if enemy.hp <= 0:
-                enemy.kill()  # Eliminar al enemigo si su HP es 0 o menor
+                enemy.kill()  
+                coin = Coin(enemy.rect.centerx, enemy.rect.centery)
+                coins.add(coin)
+                all_sprites.add(coin)
+
+    # Verificar colisiones entre el jugador y las monedas
+    collected_coins = pygame.sprite.spritecollide(player, coins, True)
+    for coin in collected_coins:
+        player.coins += 1
+        print(f'Player collected a coin! Total coins: {player.coins}')
 
     # Dibujo en pantalla
     SCREEN.blit(background, (0, 0))

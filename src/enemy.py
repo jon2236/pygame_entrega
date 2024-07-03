@@ -3,7 +3,11 @@ import pygame
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.idle_sprites = [pygame.image.load(f"imagenes/ghost{i}.png").convert_alpha() for i in range(1, 5)]
+        self.idle_sprites = []
+        self.idle_sprites.append(pygame.image.load("imagenes/ghost1.png").convert_alpha())
+        self.idle_sprites.append(pygame.image.load("imagenes/ghost2.png").convert_alpha())
+        self.idle_sprites.append(pygame.image.load("imagenes/ghost3.png").convert_alpha())
+        self.idle_sprites.append(pygame.image.load("imagenes/ghost4.png").convert_alpha())
         self.current_sprite = 0
         self.image = self.idle_sprites[self.current_sprite]
         self.rect = self.image.get_rect()
