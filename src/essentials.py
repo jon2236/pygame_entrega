@@ -15,14 +15,22 @@ pygame.display.set_icon(icono)
 font = pygame.font.SysFont(None, 60)
 font_start = pygame.font.Font("src/assets/fonts/Metroid-Fusion.ttf", 240)
 font_title = pygame.font.Font("src/assets/fonts/Metroid-Fusion.ttf", 400)
+font_restart = pygame.font.Font("src/assets/fonts/Metroid-Fusion.ttf", 50)
 
 play_button = pygame.Rect(WIDTH / 2 - 400, HEIGHT / 2 - 150, 600, 200)
 exit_button = pygame.Rect(WIDTH / 2 - 200, HEIGHT / 2 + 150, 600, 200)
+restart_button = pygame.Rect(WIDTH / 2 - 100, HEIGHT / 2 + 300, 300, 100)
+
+
 
 play_button_text = font_start.render("play", True, WHITE)
 exit_button_text = font_start.render("exit", True, WHITE)
+restart_button_text = font_restart.render("restart", True, WHITE)
+
+
 
 background = pygame.image.load("./src/assets/imagenes/ori_ara.jpg")
+gameover = pygame.image.load("./src/assets/imagenes/gameover.jpg")
 
 clock = pygame.time.Clock()
 
@@ -32,7 +40,6 @@ player = Player(clock)
 all_sprites.add(player)
 
 enemies = pygame.sprite.Group()
-
 coins = pygame.sprite.Group()
 
 
@@ -40,6 +47,7 @@ enemy_spawn_timer = 0
 enemy_spawn_delay = 7000
 initial_enemy_count = 5
 enemy_count = initial_enemy_count
+
 
 def spawn_enemies(count):
     for _ in range(count):
@@ -60,6 +68,7 @@ def spawn_enemies(count):
         enemies.add(enemy)
         all_sprites.add(enemy)
 
+
 def draw_text(superficie, texto, fuente, coordenada, color = WHITE, color_fondo = BLACK) :
     sticker = fuente.render(texto, True, color, color_fondo)
     rect = sticker.get_rect()
@@ -75,6 +84,20 @@ def start_screen():
     SCREEN.blit(play_button_text, (play_button.x, play_button.y))
     SCREEN.blit(exit_button_text, (exit_button.x + 50, exit_button.y - 10))
     pygame.display.update()
+
+
+def reset_game():
+    global score, enemy_spawn_timer, enemy_count, player, all_sprites, enemies, coins, text
+    score = 0
+    text = font.render(f"Score: {score}", True, RED)
+    enemy_spawn_timer = 0
+    enemy_count = initial_enemy_count
+    all_sprites.empty()
+    enemies.empty()
+    coins.empty()
+    player = Player(clock)
+    all_sprites.add(player)
+    spawn_enemies(enemy_count)
 
 
 def mod_rgb(imagen, frames):

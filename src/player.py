@@ -28,6 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (WIDTH // 2, HEIGHT // 2)
         self.speed = 7
         self.hp = 100
+        self.alive = True
 
         self.animation_timer = 0
         self.animation_speed = 0.1
@@ -39,6 +40,8 @@ class Player(pygame.sprite.Sprite):
         self.clock = clock  # Guardar clock
 
         self.coins = 0  # Añadir atributo para contar las monedas
+
+        
 
     def update(self, dt):
         keys = pygame.key.get_pressed()
@@ -87,3 +90,5 @@ class Player(pygame.sprite.Sprite):
     def shoot(self, direction):
         bullet = Bullet(self.rect.centerx, self.rect.centery, direction)
         self.bullets.add(bullet)
+
+    
