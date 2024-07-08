@@ -6,22 +6,22 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, clock):
         super().__init__()
         self.idle_sprites = []
-        self.idle_sprites.append(pygame.image.load("imagenes/player movement/idle1.png").convert_alpha())
-        self.idle_sprites.append(pygame.image.load("imagenes/player movement/idle2.png").convert_alpha())
-        self.idle_sprites.append(pygame.image.load("imagenes/player movement/idle3.png").convert_alpha())
-        self.idle_sprites.append(pygame.image.load("imagenes/player movement/idle4.png").convert_alpha())
-        self.idle_sprites.append(pygame.image.load("imagenes/player movement/idle5.png").convert_alpha())
+        self.idle_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/idle1.png").convert_alpha())
+        self.idle_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/idle2.png").convert_alpha())
+        self.idle_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/idle3.png").convert_alpha())
+        self.idle_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/idle4.png").convert_alpha())
+        self.idle_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/idle5.png").convert_alpha())
         self.run_sprites = []
-        self.run_sprites.append(pygame.image.load("imagenes/player movement/run1.png").convert_alpha())
-        self.run_sprites.append(pygame.image.load("imagenes/player movement/run2.png").convert_alpha())
-        self.run_sprites.append(pygame.image.load("imagenes/player movement/run3.png").convert_alpha())
-        self.run_sprites.append(pygame.image.load("imagenes/player movement/run4.png").convert_alpha())
-        self.run_sprites.append(pygame.image.load("imagenes/player movement/run5.png").convert_alpha())
-        self.run_sprites.append(pygame.image.load("imagenes/player movement/run6.png").convert_alpha())
-        self.run_sprites.append(pygame.image.load("imagenes/player movement/run7.png").convert_alpha())
-        self.run_sprites.append(pygame.image.load("imagenes/player movement/run8.png").convert_alpha())
-        self.run_sprites.append(pygame.image.load("imagenes/player movement/run9.png").convert_alpha())
-        self.run_sprites.append(pygame.image.load("imagenes/player movement/run10.png").convert_alpha())
+        self.run_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/run1.png").convert_alpha())
+        self.run_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/run2.png").convert_alpha())
+        self.run_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/run3.png").convert_alpha())
+        self.run_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/run4.png").convert_alpha())
+        self.run_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/run5.png").convert_alpha())
+        self.run_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/run6.png").convert_alpha())
+        self.run_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/run7.png").convert_alpha())
+        self.run_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/run8.png").convert_alpha())
+        self.run_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/run9.png").convert_alpha())
+        self.run_sprites.append(pygame.image.load("./src/assets/imagenes/player movement/run10.png").convert_alpha())
         self.current_sprite = 0
         self.image = self.idle_sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -32,6 +32,7 @@ class Player(pygame.sprite.Sprite):
         self.animation_speed = 0.1
         self.bullets = pygame.sprite.Group()
         self.last_direction = "right"
+        
         self.shoot_timer = 0
         self.shoot_delay = 500  # milisegundos
         self.clock = clock  # Guardar clock
@@ -41,19 +42,19 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         keys = pygame.key.get_pressed()
         moving = False
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+        if keys[pygame.K_LEFT] or keys[pygame.K_a] and self.rect.left > 0:
             self.rect.x -= self.speed
             moving = True
             self.last_direction = "left"
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d] and self.rect.right < WIDTH:
             self.rect.x += self.speed
             moving = True
             self.last_direction = "right"
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
+        if keys[pygame.K_UP] or keys[pygame.K_w] and self.rect.top > 0:
             self.rect.y -= self.speed
             moving = True
             self.last_direction = "up"
-        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]and self.rect.bottom < HEIGHT:
             self.rect.y += self.speed
             moving = True
             self.last_direction = "down"
@@ -66,13 +67,13 @@ class Player(pygame.sprite.Sprite):
                 if self.current_sprite >= len(self.run_sprites):
                     self.current_sprite = 0
                 self.image = self.run_sprites[self.current_sprite]
-                if self.last_direction == "left":
+                if self.last_direction == "right":
                     self.image = pygame.transform.flip(self.image, True, False)
             else:
                 if self.current_sprite >= len(self.idle_sprites):
                     self.current_sprite = 0
                 self.image = self.idle_sprites[self.current_sprite]
-                if self.last_direction == "left":
+                if self.last_direction == "right":
                     self.image = pygame.transform.flip(self.image, True, False)
 
         self.shoot_timer += dt

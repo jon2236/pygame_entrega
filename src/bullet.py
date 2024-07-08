@@ -3,7 +3,7 @@ from settings import *
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, direction):
         super().__init__()
-        self.image = pygame.image.load("imagenes/bullet.png").convert_alpha()
+        self.image = pygame.image.load("./src/assets/imagenes/bullet.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.speed = 15
