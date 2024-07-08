@@ -27,6 +27,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH // 2, HEIGHT // 2)
         self.speed = 7
+        self.hp = 100
 
         self.animation_timer = 0
         self.animation_speed = 0.1
@@ -42,19 +43,19 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         keys = pygame.key.get_pressed()
         moving = False
-        if keys[pygame.K_LEFT] or keys[pygame.K_a] and self.rect.left > 0:
+        if keys[pygame.K_a] and self.rect.left > 0:
             self.rect.x -= self.speed
             moving = True
             self.last_direction = "left"
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d] and self.rect.right < WIDTH:
+        if keys[pygame.K_d] and self.rect.right < WIDTH:
             self.rect.x += self.speed
             moving = True
             self.last_direction = "right"
-        if keys[pygame.K_UP] or keys[pygame.K_w] and self.rect.top > 0:
+        if keys[pygame.K_w] and self.rect.top > 0:
             self.rect.y -= self.speed
             moving = True
             self.last_direction = "up"
-        if keys[pygame.K_DOWN] or keys[pygame.K_s]and self.rect.bottom < HEIGHT:
+        if keys[pygame.K_s]and self.rect.bottom < HEIGHT:
             self.rect.y += self.speed
             moving = True
             self.last_direction = "down"

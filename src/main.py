@@ -11,8 +11,6 @@ pygame.init()
 pygame.mixer.init()
 
 
-
-# Inicialmente generar enemigos
 spawn_enemies(enemy_count)
 
 is_running = True
@@ -35,7 +33,6 @@ while is_running:
     else:
         dt = clock.tick(FPS)
 
-        # Analizo eventos
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 is_running = False
@@ -56,11 +53,11 @@ while is_running:
             else:
                 sprite.update()
         
-        # Verificar colisiones entre proyectiles y enemigos
+
         for bullet in player.bullets:
             hit_enemies = pygame.sprite.spritecollide(bullet, enemies, False)
             for enemy in hit_enemies:
-                enemy.hp -= 100  # Reducir HP del enemigo
+                enemy.hp -= 100
                 print(f'Enemy HP after hit: {enemy.hp}')  
                 bullet.kill()  
                 if enemy.hp <= 0:
@@ -69,7 +66,7 @@ while is_running:
                     coins.add(coin)
                     all_sprites.add(coin)
 
-        # Verificar colisiones entre el jugador y las monedas
+
         collected_coins = pygame.sprite.spritecollide(player, coins, True)
         for coin in collected_coins:
             score += 1
@@ -77,11 +74,18 @@ while is_running:
             player.coins += 1
             print(f'Player collected a coin! Total coins: {player.coins}')
 
+        player_death = pygame.sprite.spritecollide(player, enemies, False)
+        for enemy in player_death:
+            player.hp -= 100
+            if player.hp <= 0:
+                player.kill()
+
+
         # Dibujo en pantalla
         SCREEN.blit(background, (0, 0))
         all_sprites.draw(SCREEN)
         player.bullets.draw(SCREEN)
-        SCREEN.blit(text,(WIDTH/2,50))
+        SCREEN.blit(text,(WIDTH/2,5))
 
         pygame.display.flip()
 

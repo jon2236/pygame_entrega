@@ -22,26 +22,22 @@ exit_button = pygame.Rect(WIDTH / 2 - 200, HEIGHT / 2 + 150, 600, 200)
 play_button_text = font_start.render("play", True, WHITE)
 exit_button_text = font_start.render("exit", True, WHITE)
 
-
-
 background = pygame.image.load("./src/assets/imagenes/ori_ara.jpg")
 
 clock = pygame.time.Clock()
 
 # Crear un grupo de sprites y añadir al jugador
 all_sprites = pygame.sprite.Group()
-player = Player(clock) 
+player = Player(clock)
 all_sprites.add(player)
 
-
 enemies = pygame.sprite.Group()
-
 
 coins = pygame.sprite.Group()
 
 
 enemy_spawn_timer = 0
-enemy_spawn_delay = 7000  # 7 segundos
+enemy_spawn_delay = 7000
 initial_enemy_count = 5
 enemy_count = initial_enemy_count
 

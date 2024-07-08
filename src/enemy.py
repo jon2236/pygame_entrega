@@ -13,7 +13,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.speed = 2
-        self.hp = 100  # Añadir HP al enemigo
+        self.hp = 100
         self.animation_timer = 0
         self.animation_speed = 0.1
 

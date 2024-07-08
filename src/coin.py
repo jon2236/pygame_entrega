@@ -8,4 +8,4 @@ class Coin(pygame.sprite.Sprite):
         self.rect.center = (x, y)
 
     def update(self):
-        pass  # No necesita hacer nada por ahora
+        pass  # ver q puedo hacer.
