@@ -15,22 +15,29 @@ pygame.display.set_icon(icono)
 font = pygame.font.SysFont(None, 60)
 font_start = pygame.font.Font("src/assets/fonts/Metroid-Fusion.ttf", 240)
 font_title = pygame.font.Font("src/assets/fonts/Metroid-Fusion.ttf", 400)
+font_high_score = pygame.font.Font("src/assets/fonts/Metroid-Fusion.ttf", 50)
 font_restart = pygame.font.Font("src/assets/fonts/Metroid-Fusion.ttf", 50)
+font_main_menu = pygame.font.Font("src/assets/fonts/Metroid-Fusion.ttf", 50)
 
 play_button = pygame.Rect(WIDTH / 2 - 400, HEIGHT / 2 - 150, 600, 200)
 exit_button = pygame.Rect(WIDTH / 2 - 200, HEIGHT / 2 + 150, 600, 200)
+high_score_button = pygame.Rect(WIDTH / 2 + 600, HEIGHT / 2 + 400, 300, 100)
 restart_button = pygame.Rect(WIDTH / 2 - 100, HEIGHT / 2 + 300, 300, 100)
+main_menu_button = pygame.Rect(WIDTH / 2 + 400, HEIGHT / 2 + 300, 300, 100)
 
 
 
 play_button_text = font_start.render("play", True, WHITE)
 exit_button_text = font_start.render("exit", True, WHITE)
+high_score_button_text = font_high_score.render("high score", True, WHITE)
 restart_button_text = font_restart.render("restart", True, WHITE)
+main_menu_button_text = font_main_menu.render("main menu", True, WHITE)
 
 
 
 background = pygame.image.load("./src/assets/imagenes/ori_ara.jpg")
 gameover = pygame.image.load("./src/assets/imagenes/gameover.jpg")
+start_screen_bg = pygame.image.load("./src/assets/imagenes/samus.jpg")
 
 clock = pygame.time.Clock()
 
@@ -77,12 +84,14 @@ def draw_text(superficie, texto, fuente, coordenada, color = WHITE, color_fondo 
 
 
 def start_screen():
-    SCREEN.fill(BLACK)
+    SCREEN.blit(start_screen_bg, (0, 0))
     draw_text(SCREEN, "Utroid", font_title, (WIDTH / 2 + 200, HEIGHT / 2 - 400), WHITE)
     pygame.draw.rect(SCREEN, BLUE, play_button)
     pygame.draw.rect(SCREEN, BLUE, exit_button)
+    pygame.draw.rect(SCREEN, BLUE, high_score_button)
     SCREEN.blit(play_button_text, (play_button.x, play_button.y))
     SCREEN.blit(exit_button_text, (exit_button.x + 50, exit_button.y - 10))
+    SCREEN.blit(high_score_button_text, (high_score_button.x + 15, high_score_button.y + 30))
     pygame.display.update()
 
 

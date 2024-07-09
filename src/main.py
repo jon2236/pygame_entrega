@@ -37,11 +37,14 @@ while is_running:
             if show_title_screen:
                 if play_button.collidepoint(event.pos):
                     show_title_screen = False
+                    reset_game()
                 if exit_button.collidepoint(event.pos):
                     is_running = False
             else:
                 if restart_button.collidepoint(event.pos) and player.alive == False:
                     reset_game()
+                if main_menu_button.collidepoint(event.pos) and player.alive == False:
+                    show_title_screen = True
 
     if show_title_screen:
         start_screen()
@@ -98,7 +101,9 @@ while is_running:
         if not player.alive:
             SCREEN.blit(gameover, (0, 0))
             pygame.draw.rect(SCREEN, MAGENTA, restart_button)
+            pygame.draw.rect(SCREEN, MAGENTA, main_menu_button)
             SCREEN.blit(restart_button_text, (restart_button.x + 50, restart_button.y + 20))
+            SCREEN.blit(main_menu_button_text, (main_menu_button.x + 20, restart_button.y + 20))
 
     pygame.display.flip()
 
