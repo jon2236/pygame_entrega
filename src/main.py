@@ -43,8 +43,9 @@ def update_high_scores(score):
     save_high_scores_csv(high_scores)
 
 
-pygame.mixer.music.load(resources["music"]["start_screen_music"])
+
 pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.9)
 
 while is_running:
     for event in pygame.event.get():

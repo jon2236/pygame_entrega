@@ -16,6 +16,7 @@ with open('./src/resources.json') as f:
 
 # Cargar música
 pygame.mixer.music.load(resources["music"]["start_screen_music"])
+pygame.mixer.Sound(resources['sounds']['lazer_sound'])
 
 
 SCREEN = pygame.display.set_mode((SCREEN_SIZE))
@@ -111,18 +112,6 @@ def start_screen():
     pygame.display.update()
 
 
-# def high_score_screen():
-#     SCREEN.blit(start_screen_bg, (0, 0))
-#     draw_text(SCREEN, "best scores", font_title, (WIDTH / 2 + 200, HEIGHT / 2 - 400), WHITE)
-#     pygame.draw.rect(SCREEN, BLUE, play_button)
-#     pygame.draw.rect(SCREEN, BLUE, exit_button)
-#     pygame.draw.rect(SCREEN, BLUE, high_score_button)
-#     SCREEN.blit(play_button_text, (play_button.x, play_button.y))
-#     SCREEN.blit(exit_button_text, (exit_button.x + 50, exit_button.y - 10))
-#     SCREEN.blit(high_score_button_text, (high_score_button.x + 15, high_score_button.y + 30))
-#     pygame.display.update()
-
-
 def high_score_screen(high_scores):
     SCREEN.blit(bg_score, (0, 0))
     draw_text(SCREEN, "best scores", font_high_score_inside_menu, (WIDTH / 2 + 100, HEIGHT / 2 - 400), WHITE)
@@ -156,7 +145,7 @@ def load_high_scores_csv(filename="high_scores.csv"):
             for row in reader:
                 high_scores.append(int(row[0]))
     except FileNotFoundError:
-        pass  # Si el archivo no existe, simplemente devolver una lista vacía
+        pass
     return high_scores
 
 

@@ -36,12 +36,12 @@ class Player(pygame.sprite.Sprite):
         self.last_direction = "right"
         
         self.shoot_timer = 0
-        self.shoot_delay = 500  # milisegundos
-        self.clock = clock  # Guardar clock
+        self.shoot_delay = 500
+        self.clock = clock
 
-        self.coins = 0  # Añadir atributo para contar las monedas
+        self.coins = 0
 
-        
+
 
     def update(self, dt):
         keys = pygame.key.get_pressed()
@@ -88,6 +88,7 @@ class Player(pygame.sprite.Sprite):
         self.bullets.update()
 
     def shoot(self, direction):
+        pygame.mixer.Sound("./src/assets/sounds/lazer_sound.mp3").play()
         bullet = Bullet(self.rect.centerx, self.rect.centery, direction)
         self.bullets.add(bullet)
         
