@@ -16,7 +16,9 @@ with open('./src/resources.json') as f:
 
 # Cargar música
 pygame.mixer.music.load(resources["music"]["start_screen_music"])
-pygame.mixer.Sound(resources['sounds']['lazer_sound'])
+pygame.mixer.Sound(resources["sounds"]["lazer_sound"])
+pygame.mixer.Sound(resources["sounds"]["coin_up"])
+pygame.mixer.Sound(resources["sounds"]["enemy_death"])
 
 
 SCREEN = pygame.display.set_mode((SCREEN_SIZE))

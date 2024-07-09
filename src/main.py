@@ -100,7 +100,8 @@ while is_running:
             hit_enemies = pygame.sprite.spritecollide(bullet, enemies, False)
             for enemy in hit_enemies:
                 enemy.hp -= 100
-                print(f'Enemy HP after hit: {enemy.hp}')  
+                print(f'Enemy HP after hit: {enemy.hp}') 
+                pygame.mixer.Sound("./src/assets/sounds/enemy_death.wav").play()
                 bullet.kill()  
                 if enemy.hp <= 0:
                     enemy.kill()  
@@ -110,6 +111,7 @@ while is_running:
 
         collected_coins = pygame.sprite.spritecollide(player, coins, True)
         for coin in collected_coins:
+            pygame.mixer.Sound("./src/assets/sounds/coin_up.wav").play()
             score += 1
             text = font.render(f"Score: {score}", True, RED)
             player.coins += 1
