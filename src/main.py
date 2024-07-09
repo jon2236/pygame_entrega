@@ -1,5 +1,6 @@
 import pygame
 import random
+import json
 from settings import *
 from player import Player
 from enemy import Enemy
@@ -9,12 +10,17 @@ from essentials import *
 pygame.init()
 pygame.mixer.init()
 
+with open('resources.json') as f:
+    resources = json.load(f)
+
 spawn_enemies(enemy_count)
 
 is_running = True
 score = 0
+high_scores = load_high_scores_csv()
 text = font.render(f"Score: {score}", True, RED)
 show_title_screen = True
+show_high_score_screen = False
 
 def reset_game():
     global score, enemy_spawn_timer, enemy_count, player, all_sprites, enemies, coins, text
@@ -29,6 +35,17 @@ def reset_game():
     all_sprites.add(player)
     spawn_enemies(enemy_count)
 
+def update_high_scores(score):
+    global high_scores
+    high_scores.append(score)
+    for i in range(len(high_scores)):
+        for j in range(i + 1, len(high_scores)):
+            if high_scores[j] > high_scores[i]:
+                high_scores[i], high_scores[j] = high_scores[j], high_scores[i]
+    high_scores = high_scores[:10]
+    save_high_scores_csv(high_scores)
+
+
 while is_running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -37,9 +54,17 @@ while is_running:
             if show_title_screen:
                 if play_button.collidepoint(event.pos):
                     show_title_screen = False
+                    show_high_score_screen = False
                     reset_game()
                 if exit_button.collidepoint(event.pos):
                     is_running = False
+                if high_score_button.collidepoint(event.pos):
+                    show_title_screen = False
+                    show_high_score_screen = True
+            elif show_high_score_screen:
+                if main_menu_button.collidepoint(event.pos):
+                    show_title_screen = True
+                    show_high_score_screen = False
             else:
                 if restart_button.collidepoint(event.pos) and player.alive == False:
                     reset_game()
@@ -48,6 +73,8 @@ while is_running:
 
     if show_title_screen:
         start_screen()
+    elif show_high_score_screen:
+        high_score_screen(high_scores)
     else:
         dt = clock.tick(FPS)
 
@@ -92,6 +119,7 @@ while is_running:
             if player.hp <= 0:
                 player.alive = False
                 player.kill()
+                update_high_scores(score)
 
         # Dibujo en pantalla
         SCREEN.blit(background, (0, 0))
