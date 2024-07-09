@@ -10,9 +10,6 @@ from essentials import *
 pygame.init()
 pygame.mixer.init()
 
-with open('resources.json') as f:
-    resources = json.load(f)
-
 spawn_enemies(enemy_count)
 
 is_running = True
@@ -45,6 +42,9 @@ def update_high_scores(score):
     high_scores = high_scores[:10]
     save_high_scores_csv(high_scores)
 
+
+pygame.mixer.music.load(resources["music"]["start_screen_music"])
+pygame.mixer.music.play(-1)
 
 while is_running:
     for event in pygame.event.get():
@@ -95,6 +95,7 @@ while is_running:
                 sprite.update()
 
         for bullet in player.bullets:
+            
             hit_enemies = pygame.sprite.spritecollide(bullet, enemies, False)
             for enemy in hit_enemies:
                 enemy.hp -= 100

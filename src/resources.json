@@ -1,0 +1,8 @@
+{
+    "music": {
+        "start_screen_music": "./src/assets/music/smcover.mp3"
+    },
+    "sounds": {
+        "lazer_sound": "./.src/assents/sounds/lazer_sound.wav"
+    }
+}

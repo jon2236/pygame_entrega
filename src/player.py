@@ -90,5 +90,6 @@ class Player(pygame.sprite.Sprite):
     def shoot(self, direction):
         bullet = Bullet(self.rect.centerx, self.rect.centery, direction)
         self.bullets.add(bullet)
+        
 
     
