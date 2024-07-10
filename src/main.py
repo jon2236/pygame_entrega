@@ -1,6 +1,4 @@
 import pygame
-import random
-import json
 from settings import *
 from player import Player
 from enemy import Enemy
@@ -23,6 +21,7 @@ show_high_score_screen = False
 active_shield = False
 shield_timer = 0
 is_paused = False
+quit = False
 
 
 def reset_game():
@@ -39,13 +38,6 @@ def reset_game():
     spawn_enemies(enemy_count)
 
 def swap_lista(lista:list, valor1, valor2):
-    """summary
-
-    Args:
-        lista (list): lista a swapear
-        valor1 (type): primer valor a swapear
-        valor2 (type): segundo valor a swapear
-    """
     aux = lista[valor1]
     lista[valor1] = lista[valor2]
     lista[valor2] = aux
@@ -76,7 +68,10 @@ while is_running:
             if event.key == pygame.K_p:
                 is_paused = not is_paused
                 if is_paused:
-                    pause_screen()
+                    result = pause_screen()
+                    if result == 'main_menu':
+                        show_title_screen = True
+                        is_paused = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if show_title_screen:
                 if play_button.collidepoint(event.pos):

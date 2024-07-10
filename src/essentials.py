@@ -167,9 +167,12 @@ def pause_screen():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     paused = False
+                if event.key == pygame.K_q:  # La tecla 'Q' para volver al menú principal
+                    return 'main_menu'
         SCREEN.fill(BLACK)
         draw_text(SCREEN, "Paused", font_title, (WIDTH / 2, HEIGHT / 2 - 100), WHITE)
         draw_text(SCREEN, "Press P to continue", font_restart, (WIDTH / 2, HEIGHT / 2 + 100), WHITE)
+        draw_text(SCREEN, "Press Q to quit", font_restart, (WIDTH / 2, HEIGHT / 2 + 200), WHITE)
         
         pygame.display.update()
         clock.tick(15)
