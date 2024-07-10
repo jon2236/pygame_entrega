@@ -157,6 +157,23 @@ def save_high_scores_csv(high_scores, filename="high_scores.csv"):
         for score in high_scores:
             writer.writerow([score])
 
+def pause_screen():
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    paused = False
+        SCREEN.fill(BLACK)
+        draw_text(SCREEN, "Paused", font_title, (WIDTH / 2, HEIGHT / 2 - 100), WHITE)
+        draw_text(SCREEN, "Press P to continue", font_restart, (WIDTH / 2, HEIGHT / 2 + 100), WHITE)
+        
+        pygame.display.update()
+        clock.tick(15)
+
 
 def mod_rgb(imagen, frames):
     """Cambia el color de la imagen en rgb basado en frames"""

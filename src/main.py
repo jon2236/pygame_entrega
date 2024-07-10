@@ -12,12 +12,18 @@ pygame.mixer.init()
 
 spawn_enemies(enemy_count)
 
+life_count = 3
+
 is_running = True
 score = 0
 high_scores = load_high_scores_csv()
 text = font.render(f"Score: {score}", True, RED)
 show_title_screen = True
 show_high_score_screen = False
+active_shield = False
+shield_timer = 0
+is_paused = False
+
 
 def reset_game():
     global score, enemy_spawn_timer, enemy_count, player, all_sprites, enemies, coins, text
@@ -32,25 +38,45 @@ def reset_game():
     all_sprites.add(player)
     spawn_enemies(enemy_count)
 
+def swap_lista(lista:list, valor1, valor2):
+    """summary
+
+    Args:
+        lista (list): lista a swapear
+        valor1 (type): primer valor a swapear
+        valor2 (type): segundo valor a swapear
+    """
+    aux = lista[valor1]
+    lista[valor1] = lista[valor2]
+    lista[valor2] = aux
+
 def update_high_scores(score):
     global high_scores
     high_scores.append(score)
-    for i in range(len(high_scores)):
+    for i in range(len(high_scores) - 1):
         for j in range(i + 1, len(high_scores)):
             if high_scores[j] > high_scores[i]:
-                high_scores[i], high_scores[j] = high_scores[j], high_scores[i]
+                swap_lista(high_scores, i, j)
     high_scores = high_scores[:10]
     save_high_scores_csv(high_scores)
 
 
 
 pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(0.9)
+pygame.mixer.music.set_volume(0.7)
+
+
+
 
 while is_running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                is_paused = not is_paused
+                if is_paused:
+                    pause_screen()
         if event.type == pygame.MOUSEBUTTONDOWN:
             if show_title_screen:
                 if play_button.collidepoint(event.pos):
@@ -72,6 +98,8 @@ while is_running:
                 if main_menu_button.collidepoint(event.pos) and player.alive == False:
                     show_title_screen = True
 
+    if is_paused:
+        continue
     if show_title_screen:
         start_screen()
     elif show_high_score_screen:
@@ -79,14 +107,14 @@ while is_running:
     else:
         dt = clock.tick(FPS)
 
-        # Actualizar temporizador de spawn de enemigos
+
         enemy_spawn_timer += dt
         if enemy_spawn_timer >= enemy_spawn_delay:
             enemy_spawn_timer = 0
             enemy_count += 5  # Incrementar la cantidad de enemigos en 5
             spawn_enemies(enemy_count)
 
-        # Actualizo elementos
+
         for sprite in all_sprites:
             if isinstance(sprite, Player):
                 sprite.update(dt)
@@ -118,18 +146,29 @@ while is_running:
             print(f'Player collected a coin! Total coins: {player.coins}')
 
         player_death = pygame.sprite.spritecollide(player, enemies, False)
-        for enemy in player_death:
-            player.hp -= 100
-            if player.hp <= 0:
-                player.alive = False
-                player.kill()
-                update_high_scores(score)
+        shield_timer += 1
+        if not active_shield:
+            for enemy in player_death:
+                shield_timer = 0
+                active_shield = True
+                life_count -= 1
+                player.hp -= 100
+                if life_count <= 0:
+                    player.alive = False
+                    player.kill()
+                    life_count = 3
+                    update_high_scores(score)
+        else:
+            if shield_timer == 180:
+                active_shield = False
 
-        # Dibujo en pantalla
+
         SCREEN.blit(background, (0, 0))
         all_sprites.draw(SCREEN)
         player.bullets.draw(SCREEN)
         SCREEN.blit(text, (WIDTH / 2, 5))
+        if active_shield:
+            pygame.draw.circle(SCREEN, YELLOW, player.rect.center, 100, 1)
         if not player.alive:
             SCREEN.blit(gameover, (0, 0))
             pygame.draw.rect(SCREEN, MAGENTA, restart_button)
