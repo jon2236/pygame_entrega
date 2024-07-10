@@ -10,10 +10,11 @@ pygame.mixer.init()
 
 spawn_enemies(enemy_count)
 
-life_count = 3
+
 
 is_running = True
 score = 0
+life_count = 3
 high_scores = load_high_scores_csv()
 text = font.render(f"Score: {score}", True, RED)
 show_title_screen = True
@@ -22,7 +23,8 @@ active_shield = False
 shield_timer = 0
 is_paused = False
 quit = False
-
+heart_size = (30, 30)
+heart_spacing = 10
 
 def reset_game():
     global score, enemy_spawn_timer, enemy_count, player, all_sprites, enemies, coins, text
@@ -52,7 +54,12 @@ def update_high_scores(score):
     high_scores = high_scores[:10]
     save_high_scores_csv(high_scores)
 
-
+def draw_hearts(surface):
+    x = WIDTH - 200
+    y = 10
+    for _ in range(life_count):
+        surface.blit(heart_image, (x, y))
+        x -= heart_size[0] + heart_spacing
 
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.7)
@@ -106,7 +113,7 @@ while is_running:
         enemy_spawn_timer += dt
         if enemy_spawn_timer >= enemy_spawn_delay:
             enemy_spawn_timer = 0
-            enemy_count += 5  # Incrementar la cantidad de enemigos en 5
+            enemy_count += 5  # incremento mis enemigos
             spawn_enemies(enemy_count)
 
 
@@ -138,7 +145,7 @@ while is_running:
             score += 1
             text = font.render(f"Score: {score}", True, RED)
             player.coins += 1
-            print(f'Player collected a coin! Total coins: {player.coins}')
+            print(f"moneyyyyyyyyyy Total coins: {player.coins}")
 
         player_death = pygame.sprite.spritecollide(player, enemies, False)
         shield_timer += 1
@@ -160,6 +167,8 @@ while is_running:
 
         SCREEN.blit(background, (0, 0))
         all_sprites.draw(SCREEN)
+        SCREEN.blit(text, (WIDTH / 2, 5))
+        draw_hearts(SCREEN)
         player.bullets.draw(SCREEN)
         SCREEN.blit(text, (WIDTH / 2, 5))
         if active_shield:

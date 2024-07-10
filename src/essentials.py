@@ -10,11 +10,11 @@ pygame.init()
 
 pygame.init()
 
-# Cargar recursos desde el JSON
+
 with open('./src/resources.json') as f:
     resources = json.load(f)
 
-# Cargar música
+
 pygame.mixer.music.load(resources["music"]["start_screen_music"])
 pygame.mixer.Sound(resources["sounds"]["lazer_sound"])
 pygame.mixer.Sound(resources["sounds"]["coin_up"])
@@ -56,11 +56,11 @@ background = pygame.image.load("./src/assets/imagenes/ori_ara.jpg")
 gameover = pygame.image.load("./src/assets/imagenes/gameover.jpg")
 start_screen_bg = pygame.image.load("./src/assets/imagenes/samus.jpg")
 bg_score = pygame.image.load("./src/assets/imagenes/bg_score.jpg")
-
+heart_image = pygame.image.load("./src/assets/imagenes/hearts.png")
 
 clock = pygame.time.Clock()
 
-# Crear un grupo de sprites y añadir al jugador
+#mis sprites
 all_sprites = pygame.sprite.Group()
 player = Player(clock)
 all_sprites.add(player)
@@ -95,11 +95,11 @@ def spawn_enemies(count):
         all_sprites.add(enemy)
 
 
-def draw_text(superficie, texto, fuente, coordenada, color = WHITE, color_fondo = BLACK) :
-    sticker = fuente.render(texto, True, color, color_fondo)
-    rect = sticker.get_rect()
-    rect.center = coordenada
-    superficie.blit(sticker, rect)
+def draw_text(surface, text, font, position, color=WHITE, background_color=BLACK):
+    rendered_text = font.render(text, True, color, background_color)
+    rect = rendered_text.get_rect()
+    rect.center = position
+    surface.blit(rendered_text, rect)
 
 
 def start_screen():
@@ -167,7 +167,7 @@ def pause_screen():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     paused = False
-                if event.key == pygame.K_q:  # La tecla 'Q' para volver al menú principal
+                if event.key == pygame.K_q:  
                     return 'main_menu'
         SCREEN.fill(BLACK)
         draw_text(SCREEN, "Paused", font_title, (WIDTH / 2, HEIGHT / 2 - 100), WHITE)
@@ -177,16 +177,3 @@ def pause_screen():
         pygame.display.update()
         clock.tick(15)
 
-
-def mod_rgb(imagen, frames):
-    """Cambia el color de la imagen en rgb basado en frames"""
-    imagen_copy = imagen.copy()
-    width, height = imagen_copy.get_size()
-    for x in range(width):
-        for y in range(height):
-            r, g, b, a = imagen_copy.get_at((x, y))
-            r = (r + frames) % 256
-            g = (g + frames * 2) % 256  # Ajusta la velocidad de cambio para el canal G
-            b = (b + frames * 3) % 256  # Ajusta la velocidad de cambio para el canal B
-            imagen_copy.set_at((x, y), (r, g, b, a))
-    return imagen_copy
